@@ -1,0 +1,41 @@
+# RDRS configuration - every threshold and weight lives here.
+# Simulation mode is ON by default: RDRS never kills processes or alters your files.
+
+watch:
+  folders:
+    - data/sandbox
+  recursive: true
+
+detection:
+  window_seconds: 60
+  modified_per_minute: 30
+  renames_per_minute: 20
+  extension_changes: 15
+  entropy_threshold: 7.5
+  entropy_sample_bytes: 65536
+
+scoring:
+  weights:
+    rapid_encryption: 40
+    mass_rename: 30
+    high_entropy: 25
+    cpu_spike: 15
+    unknown_program: 10
+  levels:
+    warning: 40
+    critical: 70
+
+response:
+  simulation_mode: true
+  terminate_process: false
+  quarantine_dir: data/quarantine
+
+storage:
+  database_url: sqlite:///data/rdrs.db
+
+logging:
+  directory: logs
+  rotation: "5 MB"
+  retention: "14 days"
+
+  
