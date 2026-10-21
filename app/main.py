@@ -12,6 +12,7 @@ import time
 from app.core.config import load_settings
 from app.core.logging_setup import get_logger, setup_logging
 from app.detectors.monitor import FileMonitor
+from app.database.db import Database
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -25,7 +26,9 @@ def main(argv: list[str] | None = None) -> int:
     log = get_logger("system")
 
     folders = args.watch or settings.watch.folders
+    db = Database(settings.storage.database_url)
     monitor = FileMonitor(folders, settings.watch.recursive)
+    monitor.subscribe(db.add_event)
     monitor.start()
     log.info("RDRS started | simulation_mode={} | watching {}",
              settings.response.simulation_mode, folders)

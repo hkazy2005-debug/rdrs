@@ -18,4 +18,12 @@ def test_simulated_attack_locks_files_with_high_entropy(tmp_path):
     assert (sandbox / "README_DECRYPT.txt").exists()
     assert not list(sandbox.glob("file_*.txt"))
 
+
+
+def test_can_run_twice_in_same_sandbox(tmp_path):
+    sandbox = tmp_path / "sandbox"
+    run(sandbox, count=5)
+    run(sandbox, count=5)  # leftover .locked files must not break a second run
+    assert len(list(sandbox.glob("*.locked"))) == 5
+    
     

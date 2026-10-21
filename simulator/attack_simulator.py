@@ -28,7 +28,7 @@ def run(sandbox: Path, count: int = 50, delay: float = 0.0) -> int:
 
     for f in files:  # 2) "encrypt": random bytes + extension change
         f.write_bytes(os.urandom(20000))
-        f.rename(f.with_suffix(".locked"))
+        f.replace(f.with_suffix(".locked"))
         time.sleep(delay)
     (sandbox / "README_DECRYPT.txt").write_text("SIMULATED ransom note - test only.")
     return count
